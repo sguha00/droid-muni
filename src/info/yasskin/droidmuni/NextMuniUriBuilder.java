@@ -26,6 +26,7 @@ class NextMuniUriBuilder {
     Uri.Builder builder = s_route_details_base.buildUpon();
     builder.appendQueryParameter("a", agency);
     builder.appendQueryParameter("r", route_tag);
+    builder.appendQueryParameter("terse", "1"); // Don't need path information
     return builder.build();
   }
 
