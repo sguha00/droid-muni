@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
@@ -246,12 +247,13 @@ public class NextMuniProvider extends ContentProvider {
       Class<ParserT> parserT) {
     Log.i("DroidMuni", "Requesting " + request_uri);
     HttpGet dir_request = new HttpGet(request_uri);
-    InputStream get_response;
+    HttpResponse response;
+    HttpEntity response_entity;
     try {
-      HttpResponse response = mClient.execute(dir_request);
+      response = mClient.execute(dir_request);
       // TODO(jyasskin): Figure out how best to guarantee that the
       // response gets closed.
-      get_response = response.getEntity().getContent();
+      response_entity = response.getEntity();
     } catch (ClientProtocolException e) {
       Log.e("DroidMuni", "Cannot get " + request_uri, e);
       dir_request.abort();
@@ -274,7 +276,15 @@ public class NextMuniProvider extends ContentProvider {
           "Passed " + parserT.getName()
               + " to getAndParse(), which cannot be constructed", e);
     }
-    parser.parse(get_response);
+    
+    try {
+      parser.parse(response_entity.getContent());
+      response_entity.consumeContent();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    
     switch (parser.getResult()) {
     case SUCCESS:
       return parser;
