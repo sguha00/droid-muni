@@ -48,9 +48,9 @@ public class Compatibility {
         vm_policy_builder =
             StrictModeVmPolicyBuilder.getMethod("penaltyLog").invoke(
                 vm_policy_builder);
-        vm_policy_builder =
-            StrictModeVmPolicyBuilder.getMethod("penaltyDeath").invoke(
-                vm_policy_builder);
+//        vm_policy_builder =
+//            StrictModeVmPolicyBuilder.getMethod("penaltyDeath").invoke(
+//                vm_policy_builder);
         Object vm_policy =
             StrictModeVmPolicyBuilder.getMethod("build").invoke(
                 vm_policy_builder);
